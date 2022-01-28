@@ -102,10 +102,13 @@ def CDM(z_lens, z_source, sigma_sub=0.025, shmf_log_slope=-1.9, cone_opening_ang
     pyhalo = pyHalo(z_lens, z_source)
     # Using the render method will result a list of realizations
 
-    realization_subs = pyhalo.render(['SUBHALOS'], kwargs_model_subhalos, nrealizations=1)[0]
     realization_line_of_sight = pyhalo.render(['LINE_OF_SIGHT', 'TWO_HALO'], kwargs_model_field, nrealizations=1)[0]
 
-    cdm_realization = realization_line_of_sight.join(realization_subs, join_rendering_classes=True)
+    if kwargs_other["subhalos"]:
+        realization_subs = pyhalo.render(['SUBHALOS'], kwargs_model_subhalos, nrealizations=1)[0]
+        cdm_realization = realization_line_of_sight.join(realization_subs, join_rendering_classes=True)
+    else:
+        cdm_realization = realization_line_of_sight
 
     return cdm_realization
 
